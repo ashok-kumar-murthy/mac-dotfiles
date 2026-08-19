@@ -161,6 +161,7 @@ check_ideavim() {
 check_jetbrains() {
   local keymap="$REPO_DIR/jetbrains/keymaps/Ashok.xml"
   local selection="$REPO_DIR/jetbrains/options/keymap.xml"
+  local theme="$REPO_DIR/jetbrains/plugins/modus-theme-0.1.1.jar"
   if command -v python3 >/dev/null 2>&1; then
     run_check "JetBrains keymap XML parses" python3 -c \
       'import sys, xml.etree.ElementTree as ET; [ET.parse(path) for path in sys.argv[1:]]' \
@@ -169,7 +170,18 @@ check_jetbrains() {
     skip "python3 is unavailable for JetBrains keymap XML parsing"
   fi
   run_check "JetBrains focus chord includes Terminal" grep -Fq \
-    'first-keystroke="control SEMICOLON" second-keystroke="T"' "$keymap"
+    'first-keystroke="ctrl semicolon" second-keystroke="t"' "$keymap"
+  if command -v unzip >/dev/null 2>&1; then
+    run_check "JetBrains Modus theme plugin archive is valid" unzip -tq "$theme"
+    run_check "JetBrains Modus theme plugin identity is valid" sh -c \
+      'unzip -p "$1" META-INF/plugin.xml | grep -Fq "<id>modus-themes</id>"' \
+      sh "$theme"
+    run_check "JetBrains Modus Operandi theme is bundled" sh -c \
+      'unzip -Z1 "$1" | grep -Fxq "theme/modus-operandi.theme.json"' \
+      sh "$theme"
+  else
+    skip "unzip is unavailable for JetBrains theme verification"
+  fi
 }
 
 check_homebrew() {

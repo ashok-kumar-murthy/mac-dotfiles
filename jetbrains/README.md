@@ -23,6 +23,14 @@ Run `./scripts/install-jetbrains-keymap.sh` while the IDEs are closed. The
 script links the keymap and its selection file into the newest initialized
 IntelliJ IDEA, PyCharm, WebStorm, and DataGrip configuration directories.
 
+## Modus theme
+
+The repository includes the Modus Themes 0.1.1 plugin at
+`jetbrains/plugins/modus-theme-0.1.1.jar`. To install it in a JetBrains IDE,
+open **Settings > Plugins**, choose **Install Plugin from Disk** from the gear
+menu, and select that file. Then choose **Modus Operandi** under
+**Settings > Appearance & Behavior > Appearance**.
+
 ## Space leader
 
 | Keys | Action |
