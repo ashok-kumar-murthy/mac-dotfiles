@@ -1,0 +1,53 @@
+[user]
+	# No name/email here on purpose: this file is shared by the personal and the
+	# office machine, which commit under different identities. Each machine
+	# supplies its own in the untracked ~/.config/git/local.config included at the
+	# bottom of this file. Editing identity here means committing it, and the two
+	# machines then fight over the same line forever.
+	#
+	# Refuse to guess an identity from $USER@$(hostname) when that file is missing
+	# — an unbootstrapped machine should fail loudly on the first commit, not
+	# silently author it from the current account and hostname.
+	useConfigOnly = true
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true
+	line-numbers = true
+	hyperlinks = true
+	# delta reads bat's theme cache, so this is the same generated theme bat uses.
+	syntax-theme = "Modus Operandi"
+	# Tell delta the background is light outright. It otherwise assumes dark and
+	# picks +/- colours to match; detection is unnecessary when there is only
+	# ever one background.
+	light = true
+[merge]
+	conflictstyle = zdiff3
+[diff]
+	colorMoved = default
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+	default = current
+[fetch]
+	prune = true
+[rebase]
+	autosquash = true
+	autostash = true
+[branch]
+	sort = -committerdate
+[column]
+	ui = auto
+[rerere]
+	enabled = true
+# Machine-local, never tracked: [user] identity, and anything else that differs
+# between the two machines. Last include wins, so it can override any setting
+# above it. A missing path is not an error — git skips it silently — which is why
+# user.useConfigOnly above is what actually catches an unbootstrapped machine.
+[include]
+	path = ~/.config/git/local.config

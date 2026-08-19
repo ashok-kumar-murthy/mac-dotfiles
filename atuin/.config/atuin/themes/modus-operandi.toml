@@ -1,0 +1,13 @@
+[theme]
+name = "modus-operandi"
+
+[colors]
+AlertInfo = "#006800"
+AlertWarn = "#884900"
+AlertError = "#a60000"
+Annotation = "#595959"
+Base = "#000000"
+Guidance = "#005e8b"
+Important = "#721045"
+Title = "#0031a9"
+Muted = "#595959"

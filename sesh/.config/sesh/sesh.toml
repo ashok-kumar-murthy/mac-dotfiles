@@ -1,0 +1,16 @@
+blacklist = [
+  ".oh-my-zsh",
+  "Documents",
+  "Downloads",
+  "Workspace",
+  "flutter",
+  "homebrew",
+]
+
+[tui]
+show_windows = true
+preview = true
+
+[[wildcard]]
+pattern = "~/Projects/**"
+preview_command = "eza --tree --icons --level=2 --group-directories-first --color=always --ignore-glob='node_modules|.git|.venv|venv|target|dist|build|coverage|.next|__pycache__' {}"

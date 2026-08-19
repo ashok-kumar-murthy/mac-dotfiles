@@ -1,0 +1,6 @@
+[user]
+	name = Your Name
+	email = you@example.com
+
+# Copy this file to ~/.config/git/local.config and edit it locally.
+# The destination is intentionally ignored and never linked from this repo.

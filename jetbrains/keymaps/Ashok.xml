@@ -1,0 +1,29 @@
+<keymap version="1" name="Ashok" parent="macOS System Shortcuts">
+  <action id="ActivateCCGToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="a" />
+  </action>
+  <action id="ActivateCommitToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="g" />
+  </action>
+  <action id="ActivateDebugToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="d" />
+  </action>
+  <action id="ActivateProblemsViewToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="x" />
+  </action>
+  <action id="ActivateProjectToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="p" />
+  </action>
+  <action id="ActivateRunToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="r" />
+  </action>
+  <action id="ActivateTerminalToolWindow">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="t" />
+  </action>
+  <action id="ClaudeCodeGUI.ChatNewlineAction">
+    <keyboard-shortcut first-keystroke="meta enter" />
+  </action>
+  <action id="FocusEditor">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" second-keystroke="e" />
+  </action>
+</keymap>

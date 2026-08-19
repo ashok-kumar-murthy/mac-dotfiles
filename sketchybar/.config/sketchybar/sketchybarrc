@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# This is a demo config to showcase some of the most important commands.
+# It is meant to be changed and configured, as it is intentionally kept sparse.
+# For a (much) more advanced configuration example see my dotfiles:
+# https://github.com/FelixKratz/dotfiles
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+##### Bar Appearance #####
+# Configuring the general appearance of the bar.
+# These are only some of the options available. For all options see:
+# https://felixkratz.github.io/SketchyBar/config/bar
+# If you are looking for other colors, see the color picker:
+# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
+
+# Modus Operandi: bg-main with a subtle neutral border.
+sketchybar --bar position=top height=40 blur_radius=30 \
+                 color=0xffffffff border_color=0xffc4c4c4 border_width=1
+
+##### Changing Defaults #####
+# We now change some default values, which are applied to all further items.
+# For a full list of all available item properties see:
+# https://felixkratz.github.io/SketchyBar/config/items
+
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="IoskeleyMono Nerd Font:Bold:12.0"
+  label.font="IoskeleyMono Nerd Font:Bold:12.0"
+  icon.color=0xff000000
+  label.color=0xff000000
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+# Custom event triggered by AeroSpace's native on-focus-changed callback.
+sketchybar --add event aerospace_focus_changed
+
+##### Adding AeroSpace Workspace Indicators #####
+
+SPACE_NAMES=("WEB" "TERM" "CODE" "FILES" "KNOW" "LIFE" "MEDIA" "PLAN" "AI" "COMMS")
+for i in "${!SPACE_NAMES[@]}"
+do
+  sid="$((i + 1))"
+  workspace=(
+    icon="$sid"
+    icon.padding_left=6
+    icon.padding_right=3
+    icon.color=0xff595959
+    background.drawing=on
+    background.color=0xfff2f2f2
+    background.corner_radius=5
+    background.height=25
+    label="${SPACE_NAMES[i]}"
+    label.drawing=on
+    label.padding_left=0
+    label.padding_right=6
+    script="$PLUGIN_DIR/space.sh"
+    click_script="aerospace workspace $sid"
+  )
+  sketchybar --add item space."$sid" left \
+             --set space."$sid" "${workspace[@]}" \
+             --subscribe space."$sid" aerospace_focus_changed
+done
+
+##### Adding Left Items #####
+# We add some regular items to the left side of the bar, where
+# only the properties deviating from the current defaults need to be set
+
+sketchybar --add item chevron left \
+           --set chevron icon= label.drawing=off \
+           --add item front_app left \
+           --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
+           --subscribe front_app front_app_switched aerospace_focus_changed
+
+##### Adding Right Items #####
+# In the same way as the left items we can add items to the right side.
+# Additional position (e.g. center) are available, see:
+# https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
+
+# Some items refresh on a fixed cycle, e.g. the clock runs its script once
+# every 10s. Other items respond to events they subscribe to, e.g. the
+# volume.sh script is only executed once an actual change in system audio
+# volume is registered. More info about the event system can be found here:
+# https://felixkratz.github.io/SketchyBar/config/events
+
+sketchybar --add item clock right \
+           --set clock update_freq=10 icon=  script="$PLUGIN_DIR/clock.sh" \
+           --add item next_event right \
+           --set next_event update_freq=60 script="$PLUGIN_DIR/next_event.sh" \
+           --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change \
+           --add item volume right \
+           --set volume script="$PLUGIN_DIR/volume.sh" \
+           --subscribe volume volume_change \
+           --add item network right \
+           --set network update_freq=30 script="$PLUGIN_DIR/network.sh" \
+           --add item tailscale right \
+           --set tailscale update_freq=30 script="$PLUGIN_DIR/tailscale.sh"
+
+##### Force all scripts to run the first time (never do this in a script) #####
+sketchybar --update

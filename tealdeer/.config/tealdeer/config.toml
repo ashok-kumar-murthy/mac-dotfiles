@@ -1,0 +1,19 @@
+# tealdeer — the `help` alias in 50-aliases.zsh calls this.
+
+[updates]
+# Refresh the page cache automatically instead of failing with
+# "Page cache not found" the first time you run it on a new machine.
+auto_update = true
+auto_update_interval_hours = 720   # 30 days
+
+[display]
+compact = false
+use_pager = false
+
+[style.command_name]
+foreground = "cyan"
+[style.example_code]
+foreground = "green"
+[style.example_variable]
+foreground = "yellow"
+underline = true

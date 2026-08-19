@@ -1,0 +1,180 @@
+" Shared IdeaVim configuration for IntelliJ IDEA, PyCharm, WebStorm, and DataGrip.
+" IdeaVim action mappings must use map/nmap rather than noremap.
+
+" Leader and timing ----------------------------------------------------------
+let mapleader=" "
+set notimeout
+
+" Editor behaviour ----------------------------------------------------------
+set number
+set relativenumber
+set cursorline
+set scrolloff=8
+set sidescrolloff=8
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set clipboard=unnamedplus,ideaput
+
+" JetBrains integration -----------------------------------------------------
+set ideajoin
+set ideamarks
+set idearefactormode=keep
+set ideastatusicon=gray
+set ideawrite=all
+sethandler <C-;> a:ide
+
+" Built-in IdeaVim extensions ----------------------------------------------
+set surround
+set commentary
+set which-key
+
+" Which-Key groups ----------------------------------------------------------
+let g:WhichKeyDesc_ai = "<Space>a AI"
+let g:WhichKeyDesc_buffers = "<Space>b Buffers"
+let g:WhichKeyDesc_code = "<Space>c Code"
+let g:WhichKeyDesc_database = "<Space>d Database"
+let g:WhichKeyDesc_find = "<Space>f Find"
+let g:WhichKeyDesc_git = "<Space>g Git"
+let g:WhichKeyDesc_project = "<Space>p Project"
+let g:WhichKeyDesc_run = "<Space>r Run"
+let g:WhichKeyDesc_terminal = "<Space>t Terminal"
+let g:WhichKeyDesc_toggle = "<Space>u Toggle"
+let g:WhichKeyDesc_vim = "<Space>v IdeaVim"
+let g:WhichKeyDesc_windows = "<Space>w Windows"
+let g:WhichKeyDesc_problems = "<Space>x Problems"
+
+" Files and search ----------------------------------------------------------
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>fg <Action>(FindInPath)
+nmap <leader>fb <Action>(Switcher)
+nmap <leader>fh <Action>(GotoAction)
+nmap <leader>fr <Action>(RecentFiles)
+nmap <leader>fw <Action>(FindUsages)
+nmap <leader>e <Action>(ActivateProjectToolWindow)
+nmap - <Action>(SelectInProjectView)
+
+" Save and close ------------------------------------------------------------
+nmap <leader>s <Action>(SaveAll)
+nmap <leader>q <Action>(CloseContent)
+
+" Buffers (JetBrains editor tabs) ------------------------------------------
+nmap <leader>bb <Action>(Switcher)
+nmap <leader>bn <Action>(NextTab)
+nmap <leader>bp <Action>(PreviousTab)
+nmap <leader>bd <Action>(CloseContent)
+nmap <leader>bo <Action>(CloseAllEditorsButActive)
+nmap <leader>bu <Action>(ReopenClosedTab)
+
+" Windows and splits --------------------------------------------------------
+nmap <leader>ws <C-w>s
+nmap <leader>wv <C-w>v
+nmap <leader>ww <C-w>w
+nmap <leader>wh <C-w>h
+nmap <leader>wj <C-w>j
+nmap <leader>wk <C-w>k
+nmap <leader>wl <C-w>l
+nmap <leader>wc <C-w>c
+nmap <leader>wo <C-w>o
+nmap <leader>w= <C-w>=
+
+" Toggles -------------------------------------------------------------------
+nmap <leader>uw <Action>(EditorToggleUseSoftWraps)
+nmap <leader>ul <Action>(EditorToggleShowWhitespaces)
+
+" Code navigation and refactoring ------------------------------------------
+nmap gd <Action>(GotoDeclaration)
+nmap gi <Action>(GotoImplementation)
+nmap gr <Action>(FindUsages)
+nmap K <Action>(ShowHoverInfo)
+nmap <leader>ca <Action>(ShowIntentionActions)
+nmap <leader>cf <Action>(ReformatCode)
+nmap <leader>co <Action>(OptimizeImports)
+nmap <leader>cr <Action>(RenameElement)
+nmap <leader>cm <Action>(RefactoringMenu)
+nmap <leader>cd <Action>(QuickImplementations)
+nmap gy <Action>(GotoTypeDeclaration)
+
+" AI (CC GUI) ---------------------------------------------------------------
+if &ide !~? 'datagrip'
+  nmap <leader>aa <Action>(ActivateCCGToolWindow)
+  nmap <leader>an <Action>(ClaudeCodeGUI.CreateNewTabAction)
+  vmap <leader>as <Action>(ClaudeCodeGUI.SendSelectionToTerminalAction)
+  vmap <leader>ar <Action>(ClaudeCodeGUI.CopySelectionReferenceAction)
+  nmap <leader>af <Action>(ClaudeCodeGUI.SendFilePathToInputAction)
+  nmap <leader>aq <Action>(ClaudeCodeGUI.QuickFixWithClaudeAction)
+  nmap <leader>ag <Action>(ClaudeCodeGUI.GenerateCommitMessageAction)
+  nmap <leader>ah <Action>(ClaudeCodeGUI.HidePanelAction)
+endif
+
+" Git and VCS ---------------------------------------------------------------
+nmap <leader>gg <Action>(Vcs.Operations.Popup)
+nmap <leader>gc <Action>(ActivateCommitToolWindow)
+nmap <leader>gp <Action>(Vcs.Push)
+nmap <leader>gP <Action>(Git.Pull)
+nmap <leader>gu <Action>(Vcs.UpdateProject)
+nmap <leader>gf <Action>(Git.Fetch)
+nmap <leader>gb <Action>(Git.Branches)
+nmap <leader>gl <Action>(Vcs.Show.Log)
+nmap <leader>gd <Action>(Compare.LastVersion)
+nmap <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
+nmap <leader>ga <Action>(Annotate)
+nmap <leader>gs <Action>(Git.Show.Stage)
+nmap <leader>gS <Action>(Git.Stash)
+nmap <leader>gU <Action>(Git.Unstash)
+nmap <leader>gx <Action>(Git.ResolveConflicts)
+
+" Project -------------------------------------------------------------------
+nmap <leader>pp <Action>(ActivateProjectToolWindow)
+nmap <leader>ps <Action>(FileStructurePopup)
+nmap <leader>pi <Action>(InspectCode)
+nmap <leader>pc <Action>(CodeCleanup)
+
+" Diagnostics ---------------------------------------------------------------
+nmap [d <Action>(GotoPreviousError)
+nmap ]d <Action>(GotoNextError)
+nmap gl <Action>(ShowErrorDescription)
+nmap <leader>xx <Action>(ActivateProblemsViewToolWindow)
+nmap <leader>xn <Action>(GotoNextError)
+nmap <leader>xp <Action>(GotoPreviousError)
+nmap <leader>xf <Action>(ShowIntentionActions)
+nmap <leader>xl <Action>(ShowErrorDescription)
+
+" Run and debug -------------------------------------------------------------
+nmap <leader>rr <Action>(RunClass)
+nmap <leader>rd <Action>(DebugClass)
+nmap <leader>rl <Action>(Rerun)
+nmap <leader>rs <Action>(Stop)
+nmap <leader>rc <Action>(ChooseRunConfiguration)
+nmap <leader>ra <Action>(RunAnything)
+nmap <leader>rb <Action>(Compile)
+nmap <leader>ro <Action>(ActivateRunToolWindow)
+nmap <leader>rx <Action>(ActivateDebugToolWindow)
+
+" Terminal ------------------------------------------------------------------
+nmap <leader>tt <Action>(ActivateTerminalToolWindow)
+nmap <leader>tn <Action>(Terminal.NewTab)
+nmap <leader>to <Action>(Terminal.OpenInTerminal)
+nmap <leader>ta <Action>(Terminal.AiAgents.LaunchSelectedAgent)
+nmap <leader>ts <Action>(Terminal.Settings)
+
+" Toggles -------------------------------------------------------------------
+nmap <leader>un <Action>(EditorToggleShowLineNumbers)
+nmap <leader>ui <Action>(ToggleInlineHintsAction)
+nmap <leader>uz <Action>(ToggleDistractionFreeMode)
+nmap <leader>uf <Action>(ToggleFullScreen)
+
+" Maintenance ---------------------------------------------------------------
+nmap <leader>vr <Action>(IdeaVim.ReloadVimRc.reload)
+
+if &ide =~? 'datagrip'
+  nmap <leader>db <Action>(ActivateDatabaseToolWindow)
+  nmap <leader>dc <Action>(Jdbc.OpenConsole.New)
+  nmap <leader>do <Action>(Jdbc.OpenConsole.Any)
+  nmap <leader>de <Action>(Console.Jdbc.Execute)
+  nmap <leader>ds <Action>(Console.Jdbc.Execute.Selection)
+  nmap <leader>dx <Action>(Console.Jdbc.ExplainPlan)
+  nmap <leader>da <Action>(Console.Jdbc.ExplainAnalyse)
+  nmap <leader>dh <Action>(Console.Jdbc.BrowseHistory)
+endif

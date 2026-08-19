@@ -1,0 +1,33 @@
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE and editor-local state.
+.idea/
+*.log
+
+# Credentials and machine-local identity.
+**/.env
+**/.netrc
+**/.pgpass
+**/*.pem
+**/*.key
+**/*_rsa
+**/*_ed25519
+**/git/local.config
+**/hosts.yml
+
+# Histories, caches, databases, and generated state.
+**/.zsh_history
+**/.zcompdump*
+**/*.db
+**/*.db-shm
+**/*.db-wal
+**/node_modules/
+**/.cache/
+**/tmux/plugins/
+
+# Local migration state and recovery material never belongs in Git.
+.migration-state
+.dotfiles-backups/
