@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() { printf 'Usage: modus-theme light|dark|toggle|status\n' >&2; }
+
+data_dir="${XDG_DATA_HOME:-$HOME/.local/share}/modus-themes"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/modus-theme"
+state_file="$cache_dir/current"
+current="operandi"
+[[ -r "$state_file" ]] && current="$(<"$state_file")"
+
+case "${1:-toggle}" in
+  light | operandi) selected=operandi ;;
+  dark | vivendi) selected=vivendi ;;
+  toggle) [[ "$current" == operandi ]] && selected=vivendi || selected=operandi ;;
+  status) printf '%s\n' "$current"; exit 0 ;;
+  *) usage; exit 2 ;;
+esac
+
+mkdir -p "$cache_dir"
+cp "$data_dir/alacritty-$selected.toml" "$cache_dir/alacritty.toml"
+cp "$data_dir/tmux-$selected.conf" "$cache_dir/tmux.conf"
+cp "$data_dir/$selected.zsh" "$cache_dir/shell.zsh"
+printf '%s\n' "$selected" > "$state_file"
+
+# Keep the macOS Appearance setting in sync with the selected Modus variant.
+# System Events may request Automation permission on the first invocation.
+if [[ "$(uname -s)" == Darwin ]] && command -v osascript >/dev/null 2>&1; then
+  if [[ "$selected" == vivendi ]]; then
+    macos_dark=true
+    wallpaper="${MODUS_WALLPAPER_DARK:-/System/Library/Desktop Pictures/.thumbnails/Sonoma Dark.heic}"
+  else
+    macos_dark=false
+    wallpaper="${MODUS_WALLPAPER_LIGHT:-/System/Library/Desktop Pictures/.thumbnails/Sonoma Light.heic}"
+  fi
+  osascript -e \
+    "tell application \"System Events\" to tell appearance preferences to set dark mode to $macos_dark" \
+    >/dev/null
+  if [[ -r "$wallpaper" ]]; then
+    osascript \
+      -e 'on run argv' \
+      -e 'set wallpaperPath to item 1 of argv' \
+      -e 'tell application "System Events" to tell every desktop to set picture to wallpaperPath' \
+      -e 'end run' \
+      "$wallpaper" >/dev/null
+  else
+    printf 'warning: wallpaper is not readable: %s\n' "$wallpaper" >&2
+  fi
+fi
+
+# Alacritty watches imported files. Existing tmux and Neovim sessions need an
+# explicit refresh; failures simply mean that application is not running.
+if command -v tmux >/dev/null 2>&1; then
+  tmux source-file "$cache_dir/tmux.conf" 2>/dev/null || true
+  tmux refresh-client -S 2>/dev/null || true
+fi
+if command -v nvim >/dev/null 2>&1; then
+  nvim --server /tmp/nvim-modus-theme --remote-expr "execute('colorscheme modus_$selected')" >/dev/null 2>&1 || true
+fi
+if command -v sketchybar >/dev/null 2>&1; then
+  sketchybar --reload 2>/dev/null || true
+fi
+if [ -x "$HOME/.local/bin/sketchybar-bottom" ]; then
+  "$HOME/.local/bin/sketchybar-bottom" --reload 2>/dev/null || true
+fi
+
+printf 'Modus %s enabled. Start a new shell to refresh shell colors.\n' \
+  "$([[ "$selected" == operandi ]] && printf Operandi || printf Vivendi)"

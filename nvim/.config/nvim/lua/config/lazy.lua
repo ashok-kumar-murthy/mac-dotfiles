@@ -8,7 +8,7 @@ require("lazy").setup({
   {
     "miikanissi/modus-themes.nvim",
     priority = 1000,
-    opts = { style = "modus_operandi", transparent = false },
+    opts = { transparent = false },
   },
   {
     "nvim-treesitter/nvim-treesitter",

@@ -7,6 +7,22 @@
 
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
+MODUS_THEME="operandi"
+[ -r "$HOME/.cache/modus-theme/current" ] && MODUS_THEME="$(cat "$HOME/.cache/modus-theme/current")"
+if [ "$MODUS_THEME" = "vivendi" ]; then
+  BAR_COLOR=0xff000000
+  BORDER_COLOR=0xff646464
+  TEXT_COLOR=0xffffffff
+  SPACE_BG=0xff1e1e1e
+  SPACE_FG=0xff989898
+else
+  BAR_COLOR=0xffffffff
+  BORDER_COLOR=0xffc4c4c4
+  TEXT_COLOR=0xff000000
+  SPACE_BG=0xfff2f2f2
+  SPACE_FG=0xff595959
+fi
+
 ##### Bar Appearance #####
 # Configuring the general appearance of the bar.
 # These are only some of the options available. For all options see:
@@ -14,9 +30,11 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-# Modus Operandi: bg-main with a subtle neutral border.
-sketchybar --bar position=top height=40 blur_radius=30 \
-                 color=0xffffffff border_color=0xffc4c4c4 border_width=1
+# Full-width strip tall enough to align with the MacBook camera housing.
+sketchybar --bar position=top height=36 notch_display_height=36 margin=0 y_offset=0 \
+                 corner_radius=0 padding_left=16 padding_right=16 \
+                 blur_radius=0 shadow=off topmost=window \
+                 color="$BAR_COLOR" border_width=0
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -24,16 +42,16 @@ sketchybar --bar position=top height=40 blur_radius=30 \
 # https://felixkratz.github.io/SketchyBar/config/items
 
 default=(
-  padding_left=5
-  padding_right=5
-  icon.font="IoskeleyMono Nerd Font:Bold:12.0"
-  label.font="IoskeleyMono Nerd Font:Bold:12.0"
-  icon.color=0xff000000
-  label.color=0xff000000
-  icon.padding_left=4
-  icon.padding_right=4
-  label.padding_left=4
-  label.padding_right=4
+  padding_left=4
+  padding_right=4
+  icon.font="IoskeleyMono Nerd Font Mono:Medium:13.0"
+  label.font="IoskeleyMono Nerd Font Mono:Medium:13.0"
+  icon.color="$TEXT_COLOR"
+  label.color="$TEXT_COLOR"
+  icon.padding_left=2
+  icon.padding_right=3
+  label.padding_left=0
+  label.padding_right=2
 )
 sketchybar --default "${default[@]}"
 
@@ -46,19 +64,22 @@ SPACE_NAMES=("WEB" "TERM" "CODE" "FILES" "KNOW" "LIFE" "MEDIA" "PLAN" "AI" "COMM
 for i in "${!SPACE_NAMES[@]}"
 do
   sid="$((i + 1))"
+  display_number="$sid"
+  [ "$sid" -eq 10 ] && display_number=0
   workspace=(
-    icon="$sid"
-    icon.padding_left=6
-    icon.padding_right=3
-    icon.color=0xff595959
+    padding_left=2
+    padding_right=2
+    icon.drawing=off
+    label.font="IoskeleyMono Nerd Font Mono:Bold:11.0"
     background.drawing=on
-    background.color=0xfff2f2f2
+    background.color="$SPACE_BG"
     background.corner_radius=5
-    background.height=25
-    label="${SPACE_NAMES[i]}"
+    background.height=26
+    label="$display_number ${SPACE_NAMES[i]}"
     label.drawing=on
-    label.padding_left=0
-    label.padding_right=6
+    label.color="$SPACE_FG"
+    label.padding_left=8
+    label.padding_right=8
     script="$PLUGIN_DIR/space.sh"
     click_script="aerospace workspace $sid"
   )
@@ -66,16 +87,6 @@ do
              --set space."$sid" "${workspace[@]}" \
              --subscribe space."$sid" aerospace_focus_changed
 done
-
-##### Adding Left Items #####
-# We add some regular items to the left side of the bar, where
-# only the properties deviating from the current defaults need to be set
-
-sketchybar --add item chevron left \
-           --set chevron icon= label.drawing=off \
-           --add item front_app left \
-           --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
-           --subscribe front_app front_app_switched aerospace_focus_changed
 
 ##### Adding Right Items #####
 # In the same way as the left items we can add items to the right side.
@@ -105,3 +116,11 @@ sketchybar --add item clock right \
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
+
+# Run the compact title bar as an independent SketchyBar instance. Its
+# executable name gives it a separate command socket and configuration.
+BOTTOM_BAR="$HOME/.local/bin/sketchybar-bottom"
+if [ -x "$BOTTOM_BAR" ]; then
+  # SketchyBar's instance lock makes this safe on every top-bar reload.
+  "$BOTTOM_BAR" >/dev/null 2>&1 &
+fi

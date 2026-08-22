@@ -1,0 +1,42 @@
+#!/bin/bash
+
+PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
+BOTTOM_BAR="$HOME/.local/bin/sketchybar-bottom"
+
+MODUS_THEME="operandi"
+[ -r "$HOME/.cache/modus-theme/current" ] && MODUS_THEME="$(cat "$HOME/.cache/modus-theme/current")"
+if [ "$MODUS_THEME" = "vivendi" ]; then
+  PILL_COLOR=0xe6000000
+  BORDER_COLOR=0xff646464
+  TEXT_COLOR=0xffffffff
+else
+  PILL_COLOR=0xffffffff
+  BORDER_COLOR=0xffc4c4c4
+  TEXT_COLOR=0xff000000
+fi
+
+# A short full-width strip for window titles, visually separate from the main
+# status bar without taking much vertical space.
+"$BOTTOM_BAR" --bar position=bottom height=24 margin=0 y_offset=0 \
+                       color="$PILL_COLOR" \
+                       border_width=0 \
+                       topmost=window shadow=off \
+                       padding_left=8 padding_right=8
+
+"$BOTTOM_BAR" --default \
+  icon.drawing=off \
+  label.font="IoskeleyMono Nerd Font Mono:Medium:13.0" \
+  label.color="$TEXT_COLOR" \
+  label.padding_left=16 \
+  label.padding_right=16
+
+"$BOTTOM_BAR" --add event aerospace_focus_changed
+
+"$BOTTOM_BAR" --add item window_titles left \
+  --set window_titles \
+    background.drawing=off \
+    label.max_chars=0 \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe window_titles front_app_switched aerospace_focus_changed
+
+"$BOTTOM_BAR" --update

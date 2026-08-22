@@ -17,9 +17,13 @@ export MANROFFOPT="-c"
 # ── fzf ───────────────────────────────────────────────
 # fd instead of find: respects .gitignore, and it's an order of magnitude faster
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+# Load the palette selected by `modus-theme`; Operandi is the bootstrap default.
+[[ -r "$XDG_CACHE_HOME/modus-theme/shell.zsh" ]] && source "$XDG_CACHE_HOME/modus-theme/shell.zsh"
+: ${BAT_THEME:='Modus Operandi'}
+: ${FZF_MODUS_COLORS:='fg:#000000,bg:#ffffff,fg+:#000000,bg+:#bdbdbd,hl:#721045,hl+:#531ab6,info:#005e8b,border:#9f9f9f,prompt:#0031a9,pointer:#a60000,marker:#006800,spinner:#6f5500,header:#005e8b,query:#000000,gutter:#ffffff'}
+export BAT_THEME FZF_MODUS_COLORS
 # Shared by standalone fzf and fzf-tab. Layout options stay separate because
 # fzf-tab's tmux helper owns its popup dimensions and outer border.
-export FZF_MODUS_COLORS='fg:#000000,bg:#ffffff,fg+:#000000,bg+:#bdbdbd,hl:#721045,hl+:#531ab6,info:#005e8b,border:#9f9f9f,prompt:#0031a9,pointer:#a60000,marker:#006800,spinner:#6f5500,header:#005e8b,query:#000000,gutter:#ffffff'
 export FZF_DEFAULT_OPTS="
   --height=60%
   --layout=reverse

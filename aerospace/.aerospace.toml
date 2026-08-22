@@ -26,7 +26,10 @@ default-root-container-layout = 'accordion'
 default-root-container-orientation = 'horizontal'
 
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-on-focus-changed = ['exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_focus_changed']
+on-focus-changed = [
+    'exec-and-forget /opt/homebrew/bin/sketchybar --trigger aerospace_focus_changed',
+    'exec-and-forget ~/.local/bin/sketchybar-bottom --trigger aerospace_focus_changed',
+]
 
 automatically-unhide-macos-hidden-apps = true
 
@@ -41,7 +44,7 @@ key-mapping.preset = 'qwerty'
 gaps.inner.horizontal = 0
 gaps.inner.vertical =   0
 gaps.outer.left =       0
-gaps.outer.bottom =     0
+gaps.outer.bottom =     24
 gaps.outer.top =        0
 gaps.outer.right =      0
 
@@ -62,7 +65,7 @@ run = 'move-node-to-workspace 2'
     cmd-shift-rightSquareBracket = 'focus dfs-next'
     cmd-backtick = 'focus-back-and-forth || workspace-back-and-forth'
 
-    # cmd-f = 'fullscreen'
+    cmd-f = 'fullscreen'
 
     cmd-shift-comma = 'exec-and-forget /bin/sh -c ~/.config/sketchybar/plugins/rename_window.sh'
 

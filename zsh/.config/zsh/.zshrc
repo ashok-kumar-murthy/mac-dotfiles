@@ -57,7 +57,5 @@ for _zfile in $ZDOTDIR/[0-9][0-9]-*.zsh(N); do
 done
 unset _zfile
 
-. "$HOME/.local/share/../bin/env"
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

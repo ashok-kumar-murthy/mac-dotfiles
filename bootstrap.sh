@@ -171,7 +171,7 @@ if [[ -z "$LINK_ONLY" ]]; then
   command -v bat >/dev/null 2>&1 && run bat cache --build
 fi
 
-packages=(git powerlevel10k bat ripgrep atuin sesh tealdeer zsh alacritty tmux nvim ideavim aerospace sketchybar homebrew)
+packages=(git powerlevel10k bat ripgrep atuin sesh tealdeer theme zsh alacritty tmux nvim ideavim aerospace sketchybar homebrew)
 for package in "${packages[@]}"; do
   if [[ -n "$DRY_RUN" ]]; then
     printf 'would link package: %s\n' "$package"
@@ -179,6 +179,13 @@ for package in "${packages[@]}"; do
     "$REPO_DIR/manage.sh" link "$package"
   fi
 done
+
+if [[ -n "$DRY_RUN" ]]; then
+  echo "would initialize Modus Operandi"
+else
+  "$HOME/.local/bin/modus-theme" light
+  command -v bat >/dev/null 2>&1 && bat cache --build
+fi
 
 if [[ -e "$REPO_DIR/.git" ]] && { [[ -n "$DRY_RUN" ]] || command -v pre-commit >/dev/null 2>&1; }; then
   (

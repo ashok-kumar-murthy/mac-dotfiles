@@ -5,7 +5,6 @@ opt.relativenumber = true
 opt.cursorline = true
 opt.signcolumn = "yes"
 opt.termguicolors = true
-opt.background = "light"
 opt.mouse = "a"
 opt.clipboard = "unnamedplus"
 opt.ignorecase = true
@@ -25,4 +24,10 @@ opt.completeopt = { "menu", "menuone", "noselect" }
 opt.confirm = true
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
-vim.cmd.colorscheme("modus_operandi")
+local theme_file = vim.fn.expand("~/.cache/modus-theme/current")
+local theme = "operandi"
+if vim.fn.filereadable(theme_file) == 1 then
+  theme = vim.trim(vim.fn.readfile(theme_file)[1] or theme)
+end
+opt.background = theme == "vivendi" and "dark" or "light"
+vim.cmd.colorscheme("modus_" .. (theme == "vivendi" and "vivendi" or "operandi"))

@@ -23,6 +23,26 @@ Modus Operandi is applied consistently to Alacritty, tmux, Neovim, Atuin,
 Powerlevel10k, bat/delta, fzf, fzf-tab, eza/`LS_COLORS`, and zsh's line editor,
 autosuggestions, and syntax highlighting.
 
+Both Modus Operandi (light) and Modus Vivendi (dark) are installed. Switch the
+terminal-oriented stack without modifying tracked files:
+
+```sh
+./manage.sh link theme # once, on an existing setup
+modus-theme dark       # Modus Vivendi
+modus-theme light      # Modus Operandi
+modus-theme toggle
+modus-theme status
+```
+
+The command also changes the macOS Appearance setting and switches between the
+built-in Sonoma Light and Dark wallpapers on every desktop. Alacritty, tmux,
+and SketchyBar refresh immediately. New Neovim and shell sessions use the
+selected theme; run `exec zsh` to refresh the current shell. macOS may request
+Automation permission for System Events the first time the switcher runs.
+
+To use personal wallpaper files, set `MODUS_WALLPAPER_LIGHT` and
+`MODUS_WALLPAPER_DARK` to absolute image paths before running the switcher.
+
 ## Existing Mac: migrate one package at a time
 
 Before linking anything, keep a private snapshot outside this repository. Then:

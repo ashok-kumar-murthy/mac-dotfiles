@@ -10,7 +10,7 @@ BACKUP_DIR="$BACKUP_BASE/live-$RUN_ID"
 
 PACKAGES=(
   git powerlevel10k bat ripgrep atuin sesh tealdeer
-  zsh alacritty tmux nvim ideavim aerospace sketchybar homebrew
+  zsh alacritty tmux nvim ideavim aerospace sketchybar homebrew theme
 )
 
 usage() {

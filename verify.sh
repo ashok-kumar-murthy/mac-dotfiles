@@ -21,7 +21,7 @@ run_check() {
 }
 
 check_shells() {
-  run_check "Bash scripts parse" bash -n "$REPO_DIR/bootstrap.sh" "$REPO_DIR/manage.sh" "$REPO_DIR/verify.sh" "$REPO_DIR/scripts/install-font.sh" "$REPO_DIR/scripts/install-jetbrains-keymap.sh"
+  run_check "Bash scripts parse" bash -n "$REPO_DIR/bootstrap.sh" "$REPO_DIR/manage.sh" "$REPO_DIR/verify.sh" "$REPO_DIR/scripts/install-font.sh" "$REPO_DIR/scripts/install-jetbrains-keymap.sh" "$REPO_DIR/theme/.local/bin/modus-theme"
   if command -v shellcheck >/dev/null 2>&1; then
     run_check "Shell scripts pass ShellCheck" shellcheck \
       "$REPO_DIR/bootstrap.sh" \
@@ -29,7 +29,9 @@ check_shells() {
       "$REPO_DIR/verify.sh" \
       "$REPO_DIR/scripts/install-font.sh" \
       "$REPO_DIR/scripts/install-jetbrains-keymap.sh" \
+      "$REPO_DIR/theme/.local/bin/modus-theme" \
       "$REPO_DIR/sketchybar/.config/sketchybar/sketchybarrc" \
+      "$REPO_DIR/sketchybar/.config/sketchybar-bottom/sketchybarrc" \
       "$REPO_DIR"/sketchybar/.config/sketchybar/plugins/*.sh
   else
     skip "shellcheck is unavailable"
@@ -45,8 +47,8 @@ check_shells() {
     run_check "Zsh line editor uses Modus Operandi" grep -Fq \
       "'region:fg=#000000,bg=#bdbdbd'" \
       "$REPO_DIR/zsh/.config/zsh/30-keybindings.zsh"
-    run_check "fzf uses Modus Operandi" grep -Fq -- \
-      "export FZF_MODUS_COLORS='fg:#000000,bg:#ffffff" \
+    run_check "fzf has an Operandi fallback" grep -Fq -- \
+      ": \${FZF_MODUS_COLORS:='fg:#000000,bg:#ffffff" \
       "$REPO_DIR/zsh/.config/zsh/10-exports.zsh"
     run_check "fzf-tab avoids a nested tmux border" grep -Fq \
       '_fzf_tab_border=none' \
@@ -70,7 +72,7 @@ check_shells() {
   else
     skip "zsh is unavailable"
   fi
-  run_check "SketchyBar scripts parse" sh -n "$REPO_DIR/sketchybar/.config/sketchybar/sketchybarrc" "$REPO_DIR"/sketchybar/.config/sketchybar/plugins/*.sh
+  run_check "SketchyBar scripts parse" sh -n "$REPO_DIR/sketchybar/.config/sketchybar/sketchybarrc" "$REPO_DIR/sketchybar/.config/sketchybar-bottom/sketchybarrc" "$REPO_DIR"/sketchybar/.config/sketchybar/plugins/*.sh
 }
 
 check_atuin() {
@@ -87,6 +89,19 @@ check_toml() {
   else
     skip "python3 is unavailable for TOML parsing"
   fi
+}
+
+check_theme() {
+  local switcher="$REPO_DIR/theme/.local/bin/modus-theme"
+  local theme_root
+  theme_root="$(mktemp -d)"
+  mkdir -p "$theme_root/data" "$theme_root/cache"
+  ln -s "$REPO_DIR/theme/.local/share/modus-themes" "$theme_root/data/modus-themes"
+  run_check "Modus switcher selects Vivendi" env \
+    HOME="$theme_root" XDG_DATA_HOME="$theme_root/data" XDG_CACHE_HOME="$theme_root/cache" \
+    PATH=/usr/bin:/bin "$switcher" dark
+  run_check "Modus Vivendi state is recorded" grep -Fxq vivendi "$theme_root/cache/modus-theme/current"
+  run_check "Modus Vivendi bat theme parses" plutil -lint "$REPO_DIR/bat/.config/bat/themes/Modus Vivendi.tmTheme"
 }
 
 check_git() {
@@ -212,7 +227,7 @@ check_public_safety() {
 
 check_modes() {
   local script mode_failure=0
-  for script in "$REPO_DIR/bootstrap.sh" "$REPO_DIR/manage.sh" "$REPO_DIR/verify.sh" "$REPO_DIR/scripts/install-font.sh" "$REPO_DIR/scripts/install-jetbrains-keymap.sh" "$REPO_DIR"/sketchybar/.config/sketchybar/plugins/*.sh; do
+  for script in "$REPO_DIR/bootstrap.sh" "$REPO_DIR/manage.sh" "$REPO_DIR/verify.sh" "$REPO_DIR/scripts/install-font.sh" "$REPO_DIR/scripts/install-jetbrains-keymap.sh" "$REPO_DIR/theme/.local/bin/modus-theme" "$REPO_DIR"/sketchybar/.config/sketchybar/plugins/*.sh; do
     if [[ ! -x "$script" ]]; then
       fail "executable bit: ${script#$REPO_DIR/}"
       mode_failure=1
@@ -224,7 +239,8 @@ check_modes() {
 case "$PACKAGE" in
   all)
     check_shells
-    check_toml
+check_toml
+check_theme
     check_git
     check_tmux
     check_powerlevel10k

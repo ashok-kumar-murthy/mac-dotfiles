@@ -33,3 +33,5 @@ fi
 mv "$tmp_file" "$state_file"
 
 sketchybar --trigger aerospace_focus_changed
+[ -x "$HOME/.local/bin/sketchybar-bottom" ] && \
+  "$HOME/.local/bin/sketchybar-bottom" --trigger aerospace_focus_changed

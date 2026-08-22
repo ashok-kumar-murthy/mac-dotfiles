@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# SketchyBar keys independent instances by argv[0]. Keep the second instance
+# inside the dotfiles package without requiring a Homebrew-level symlink.
+exec -a sketchybar-bottom /opt/homebrew/bin/sketchybar "$@"

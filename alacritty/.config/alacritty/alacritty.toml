@@ -1,9 +1,10 @@
+general.import = ["~/.cache/modus-theme/alacritty.toml"]
+
 [window]
 dimensions = { columns = 120, lines = 34 }
 padding = { x = 12, y = 10 }
 dynamic_padding = true
 decorations = "Buttonless"
-decorations_theme_variant = "Light"
 dynamic_title = true
 opacity = 1
 blur = false
@@ -18,19 +19,19 @@ size = 15.0
 builtin_box_drawing = true
 
 [font.normal]
-family = "IoskeleyMono Nerd Font"
+family = "IoskeleyMono Nerd Font Mono"
 style = "Regular"
 
 [font.bold]
-family = "IoskeleyMono Nerd Font"
+family = "IoskeleyMono Nerd Font Mono"
 style = "Bold"
 
 [font.italic]
-family = "IoskeleyMono Nerd Font"
+family = "IoskeleyMono Nerd Font Mono"
 style = "Italic"
 
 [font.bold_italic]
-family = "IoskeleyMono Nerd Font"
+family = "IoskeleyMono Nerd Font Mono"
 style = "Bold Italic"
 
 [cursor]
@@ -48,51 +49,6 @@ TERM = "xterm-256color"
 
 [terminal]
 osc52 = "OnlyCopy"
-
-[colors.primary]
-background = "#ffffff"
-foreground = "#000000"
-bright_foreground = "#000000"
-
-[colors.cursor]
-text = "#ffffff"
-cursor = "#000000"
-
-[colors.vi_mode_cursor]
-text = "#ffffff"
-cursor = "#0031a9"
-
-[colors.selection]
-text = "#000000"
-background = "#bdbdbd"
-
-[colors.search.matches]
-foreground = "#000000"
-background = "#bdbdbd"
-
-[colors.search.focused_match]
-foreground = "#000000"
-background = "#f2e900"
-
-[colors.normal]
-black = "#000000"
-red = "#a60000"
-green = "#006800"
-yellow = "#6f5500"
-blue = "#0031a9"
-magenta = "#721045"
-cyan = "#005e8b"
-white = "#bfbfbf"
-
-[colors.bright]
-black = "#595959"
-red = "#972500"
-green = "#315b00"
-yellow = "#884900"
-blue = "#354fcf"
-magenta = "#531ab6"
-cyan = "#005f5f"
-white = "#ffffff"
 
 [[keyboard.bindings]]
 key = "Left"
@@ -123,3 +79,8 @@ chars = "\u0015"
 key = "Back"
 mods = "Option"
 chars = "\u001B\u007F"
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

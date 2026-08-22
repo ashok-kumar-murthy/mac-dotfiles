@@ -5,6 +5,7 @@
 # NVM — Node.js versions and global npm tools.
 export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+nvm use --silent v24.19.0
 
 # SDKMAN — Java, Gradle, and other JVM tools.
 export SDKMAN_DIR="${SDKMAN_DIR:-$HOME/.sdkman}"
