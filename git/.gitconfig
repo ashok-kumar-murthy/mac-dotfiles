@@ -9,6 +9,8 @@
 	# — an unbootstrapped machine should fail loudly on the first commit, not
 	# silently author it from the current account and hostname.
 	useConfigOnly = true
+	name = Ashok
+	email = ashokmr991@icloud.com
 [core]
 	pager = delta
 [interactive]
